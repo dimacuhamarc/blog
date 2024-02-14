@@ -1,6 +1,6 @@
 class ArticlesController < ApplicationController
   def index
-    @articles = Article.all
+    @articles = Article.all.order(updated_at: :desc) #method chaining
   end
 
   def show
@@ -34,9 +34,9 @@ class ArticlesController < ApplicationController
     @article = Article.find(params[:id])
 
     if @article.update(article_params)
-      redirect_to @article
+      redirect_to @article, notice: "Successfully Updated."
     else
-      render :edit
+      render :edit, status: :unprocessable_entity #error 422
     end
   end
 
@@ -44,7 +44,7 @@ class ArticlesController < ApplicationController
     @article = Article.find(params[:id])
     @article.destroy
 
-    redirect_to articles_path, notice: 'Article was successfully deleted.'
+    redirect_to articles_path ##, notice: 'Article was successfully deleted.'
   end
 
   private
